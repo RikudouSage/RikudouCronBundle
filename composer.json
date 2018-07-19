@@ -1,0 +1,23 @@
+{
+  "name": "rikudou/cron-bundle",
+  "type": "symfony-bundle",
+  "description": "Simple Symfony Cron implementation",
+  "license": "WTFPL",
+  "authors": [
+    {
+      "name": "Dominik Chrástecký",
+      "email": "dominik@chrastecky.cz"
+    }
+  ],
+  "require": {
+    "php": ">=7.2",
+    "symfony/framework-bundle": "^4.1",
+    "dragonmantank/cron-expression": "^2.2",
+    "symfony/console": "^4.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Rikuodu\\CronBundle\\": ""
+    }
+  }
+}

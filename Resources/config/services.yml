@@ -1,0 +1,10 @@
+services:
+
+  Rikudou\CronBundle\Command\:
+    resource: '../../Command'
+    autowire: true
+    tags: [console.command]
+
+  Rikudou\CronBundle\Cron\CronJobsList:
+    autowire: true
+    autoconfigure: true
