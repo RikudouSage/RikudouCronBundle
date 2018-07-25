@@ -67,9 +67,7 @@ class RunCronCommand extends Command
             if ($output->isVeryVerbose()) {
                 foreach ($errors as $class => $error) {
                     $output->writeln("Error in cron job {$class}");
-                    $output->writeln($exception->getMessage());
-                    $output->writeln("{$exception->getFile()} at line {$exception->getLine()}");
-                    $output->writeln($exception->getTraceAsString());
+                    $output->writeln($error);
                 }
             } else {
                 $table = new Table($output);
