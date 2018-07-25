@@ -34,7 +34,7 @@ class ListCronCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!count($this->cronJobsList->getClasses())) {
+        if (!count($this->cronJobsList)) {
             $output->writeln("There are no registered cron jobs.");
             return 0;
         }
@@ -46,7 +46,7 @@ class ListCronCommand extends Command
             "Next run"
         ]);
 
-        foreach ($this->cronJobsList->getClasses() as $class) {
+        foreach ($this->cronJobsList as $class) {
             /** @var CronJobInterface $cronJob */
             $cronJob = new $class;
             try {

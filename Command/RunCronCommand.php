@@ -42,7 +42,7 @@ class RunCronCommand extends Command
     {
         $errors = [];
         $success = 0;
-        foreach ($this->cronJobsList->getClasses() as $cronJob) {
+        foreach ($this->cronJobsList as $cronJob) {
             /** @var CronJobInterface $cronJob */
             try {
                 $cronJob = new $cronJob;
