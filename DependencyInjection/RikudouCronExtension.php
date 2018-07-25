@@ -23,6 +23,5 @@ class RikudouCronExtension extends Extension
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . "/../Resources/config"));
         $loader->load("services.yml");
-//        $container->registerForAutoconfiguration(CronJobInterface::class)->addTag("rikudou_cron_job.cronjob");
     }
 }
