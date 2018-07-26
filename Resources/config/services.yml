@@ -1,10 +1,13 @@
 services:
 
+  _defaults:
+    public: true
+
+  rikudou_cron.logger:
+    alias: 'logger'
+
   Rikudou\CronBundle\Command\:
     resource: '../../Command'
-    autowire: true
     tags: [console.command]
 
-  Rikudou\CronBundle\Cron\CronJobsList:
-    autowire: true
-    autoconfigure: true
+  Rikudou\CronBundle\Cron\CronJobsList: ~

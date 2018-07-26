@@ -6,31 +6,19 @@ use Cron\CronExpression;
 use Psr\Log\LoggerInterface;
 use Rikudou\CronBundle\Cron\CronJobInterface;
 use Rikudou\CronBundle\Cron\CronJobsList;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RunCronCommand extends Command
+class RunCronCommand extends ContainerAwareCommand
 {
 
     protected static $defaultName = "cron:run";
 
-    /**
-     * @var CronJobsList
-     */
-    private $cronJobsList;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    public function __construct(?string $name = null, CronJobsList $cronJobsList, LoggerInterface $logger)
+    public function __construct(?string $name = null)
     {
         parent::__construct($name);
-        $this->cronJobsList = $cronJobsList;
-        $this->logger = $logger;
     }
 
     protected function configure()
@@ -40,15 +28,19 @@ class RunCronCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $cronJobsList = $this->getContainer()->get(CronJobsList::class);
+        /** @var LoggerInterface $logger */
+        $logger = $this->getContainer()->get("rikudou_cron.logger");
+
         $errors = [];
         $success = 0;
-        foreach ($this->cronJobsList as $cronJob) {
+        foreach ($cronJobsList as $cronJob) {
             /** @var CronJobInterface $cronJob */
             try {
                 $cronJob = new $cronJob;
                 $cronExpression = CronExpression::factory($cronJob->getCronExpression());
                 if ($cronExpression->isDue()) {
-                    $cronJob->execute($input, $output, $this->logger);
+                    $cronJob->execute($input, $output, $logger);
                 }
                 $success++;
             } catch (\Throwable $exception) {

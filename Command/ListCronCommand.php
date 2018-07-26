@@ -5,25 +5,19 @@ namespace Rikudou\CronBundle\Command;
 use Cron\CronExpression;
 use Rikudou\CronBundle\Cron\CronJobInterface;
 use Rikudou\CronBundle\Cron\CronJobsList;
-use Symfony\Component\Console\Command\Command;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ListCronCommand extends Command
+class ListCronCommand extends ContainerAwareCommand
 {
 
     protected static $defaultName = "cron:list";
 
-    /**
-     * @var CronJobsList
-     */
-    private $cronJobsList;
-
-    public function __construct(?string $name = null, CronJobsList $cronJobsList)
+    public function __construct(?string $name = null)
     {
         parent::__construct($name);
-        $this->cronJobsList = $cronJobsList;
     }
 
     protected function configure()
@@ -34,7 +28,9 @@ class ListCronCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!count($this->cronJobsList)) {
+        $cronJobsList = $this->getContainer()->get(CronJobsList::class);
+
+        if (!count($cronJobsList)) {
             $output->writeln("There are no registered cron jobs.");
             return 0;
         }
@@ -46,7 +42,7 @@ class ListCronCommand extends Command
             "Next run"
         ]);
 
-        foreach ($this->cronJobsList as $class) {
+        foreach ($cronJobsList as $class) {
             /** @var CronJobInterface $cronJob */
             $cronJob = new $class;
             try {
