@@ -2,7 +2,6 @@
 
 namespace Rikudou\CronBundle\DependencyInjection;
 
-use Rikudou\CronBundle\Cron\CronJobInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
