@@ -4,7 +4,7 @@ It shouldn't really be used anywhere near production.
 
 ## How to install
 
-Via composer: `composer require rikudou/cron-bundle:dev-master`.
+Via composer: `composer require rikudou/cron-bundle`.
 
 The bundle should be enabled automatically if you use the Symfony Flex.
 
