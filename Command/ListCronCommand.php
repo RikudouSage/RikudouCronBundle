@@ -37,6 +37,7 @@ class ListCronCommand extends ContainerAwareCommand
         $table = new Table($output);
         $table->setHeaders([
             "Class",
+            "Enabled",
             "Cron expression",
             "Is due",
             "Next run"
@@ -46,9 +47,14 @@ class ListCronCommand extends ContainerAwareCommand
             /** @var CronJobInterface $cronJob */
             $cronJob = new $class;
             try {
+                $enabled = true;
+                if (method_exists($cronJob, "isEnabled")) {
+                    $enabled = $cronJob->isEnabled();
+                }
                 $cronExpression = CronExpression::factory($cronJob->getCronExpression());
                 $table->addRow([
                     $class,
+                    $enabled ? "yes" : "no",
                     $cronJob->getCronExpression(),
                     $cronExpression->isDue() ? "yes" : "no",
                     $cronExpression->getNextRunDate()->format("Y-m-d H:i:s")

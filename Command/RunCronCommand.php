@@ -38,6 +38,11 @@ class RunCronCommand extends ContainerAwareCommand
             /** @var CronJobInterface $cronJob */
             try {
                 $cronJob = new $cronJob;
+                if(method_exists($cronJob, "isEnabled")) {
+                    if(!$cronJob->isEnabled()) {
+                        continue;
+                    }
+                }
                 $cronExpression = CronExpression::factory($cronJob->getCronExpression());
                 if ($cronExpression->isDue()) {
                     $cronJob->execute($input, $output, $logger);
