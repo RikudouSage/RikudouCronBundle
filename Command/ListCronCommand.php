@@ -62,6 +62,7 @@ class ListCronCommand extends ContainerAwareCommand
             } catch (\InvalidArgumentException $exception) {
                 $table->addRow([
                     "<error>$class</error>",
+                    "<error>" . ($enabled ? "yes" : "no") . "</error>",
                     "<error>{$cronJob->getCronExpression()}</error>",
                     "<error>Cron expression is invalid</error>",
                     "<error>Cron expression is invalid</error>"
