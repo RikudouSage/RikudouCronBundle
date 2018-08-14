@@ -1,7 +1,7 @@
 {
   "name": "rikudou/cron-bundle",
   "type": "symfony-bundle",
-  "description": "Simple Symfony Cron implementation",
+  "description": "Simple and effective cron implementation for Symfony 4",
   "license": "WTFPL",
   "authors": [
     {
