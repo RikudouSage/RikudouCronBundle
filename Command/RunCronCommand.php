@@ -8,6 +8,7 @@ use Rikudou\CronBundle\Cron\CronJobInterface;
 use Rikudou\CronBundle\Cron\CronJobsList;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -59,6 +60,28 @@ class RunCronCommand extends ContainerAwareCommand
                 $errors[get_class($cronJob)] = $error;
             }
         }
+
+        foreach ($cronJobsList->getCommands() as $command => $cron) {
+            $commandName = $command;
+            try {
+                $cronExpression = CronExpression::factory($cron);
+                if($cronExpression->isDue()) {
+                    $command = $this->getApplication()->find($command);
+                    $commandInput = new ArrayInput([]);
+                    $command->run($commandInput, $output);
+                }
+            } catch (\Throwable $exception) {
+                if($output->isVeryVerbose()) {
+                    $error = $exception->getTraceAsString();
+                } else if($output->isVerbose()) {
+                    $error = "{$exception->getMessage()} (file {$exception->getFile()} at line {$exception->getLine()})";
+                } else {
+                    $error = $exception->getMessage();
+                }
+                $errors[$commandName] = $error;
+            }
+        }
+
         if (count($errors)) {
             $output->writeln("<error>Encountered these errors when running cron:</error>");
             if ($output->isVeryVerbose()) {
@@ -69,7 +92,7 @@ class RunCronCommand extends ContainerAwareCommand
             } else {
                 $table = new Table($output);
                 $table->setHeaders([
-                    "Class",
+                    "Class/Command",
                     "Error"
                 ]);
                 foreach ($errors as $class => $error) {

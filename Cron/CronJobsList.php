@@ -16,12 +16,19 @@ class CronJobsList implements \Countable, \ArrayAccess, \Iterator
     private $classes;
 
     /**
+     * @var array
+     */
+    private $commands;
+
+    /**
      * CronJobsList constructor.
+     * @param array $commands
      * @param string[] $classes
      */
-    public function __construct(array $classes)
+    public function __construct(array $commands, array $classes)
     {
         $this->classes = $classes;
+        $this->commands = $commands;
     }
 
     /**
@@ -30,6 +37,14 @@ class CronJobsList implements \Countable, \ArrayAccess, \Iterator
     public function getClasses(): array
     {
         return $this->classes;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCommands(): array
+    {
+        return $this->commands;
     }
 
     /**

@@ -30,47 +30,79 @@ class ListCronCommand extends ContainerAwareCommand
     {
         $cronJobsList = $this->getContainer()->get(CronJobsList::class);
 
-        if (!count($cronJobsList)) {
+        if (!count($cronJobsList) && !count($cronJobsList->getCommands())) {
             $output->writeln("There are no registered cron jobs.");
             return 0;
         }
-        $table = new Table($output);
-        $table->setHeaders([
-            "Class",
-            "Enabled",
-            "Cron expression",
-            "Is due",
-            "Next run"
-        ]);
 
-        foreach ($cronJobsList as $class) {
-            /** @var CronJobInterface $cronJob */
-            $cronJob = new $class;
-            try {
-                $enabled = true;
-                if (method_exists($cronJob, "isEnabled")) {
-                    $enabled = $cronJob->isEnabled();
+        if(count($cronJobsList)) {
+            $output->writeln("<info>Classes</info>");
+
+            $table = new Table($output);
+            $table->setHeaders([
+                "Class",
+                "Enabled",
+                "Cron expression",
+                "Is due",
+                "Next run"
+            ]);
+
+            foreach ($cronJobsList as $class) {
+                /** @var CronJobInterface $cronJob */
+                $cronJob = new $class;
+                try {
+                    $enabled = true;
+                    if (method_exists($cronJob, "isEnabled")) {
+                        $enabled = $cronJob->isEnabled();
+                    }
+                    $cronExpression = CronExpression::factory($cronJob->getCronExpression());
+                    $table->addRow([
+                        $class,
+                        $enabled ? "yes" : "no",
+                        $cronJob->getCronExpression(),
+                        $cronExpression->isDue() ? "yes" : "no",
+                        $cronExpression->getNextRunDate()->format("Y-m-d H:i:s")
+                    ]);
+                } catch (\InvalidArgumentException $exception) {
+                    $table->addRow([
+                        "<error>$class</error>",
+                        "<error>" . ($enabled ? "yes" : "no") . "</error>",
+                        "<error>{$cronJob->getCronExpression()}</error>",
+                        "<error>Cron expression is invalid</error>",
+                        "<error>Cron expression is invalid</error>"
+                    ]);
                 }
-                $cronExpression = CronExpression::factory($cronJob->getCronExpression());
+            }
+
+            $table->render();
+        }
+
+        if(count($cronJobsList->getCommands())) {
+            $output->writeln("<info>Commands</info>");
+
+            $table = new Table($output);
+
+            $table->setHeaders([
+                "Command",
+                "Cron expression",
+                "Is due",
+                "Next run"
+            ]);
+
+            foreach ($cronJobsList->getCommands() as $command => $cron) {
+                $cronExpression = CronExpression::factory($cron);
                 $table->addRow([
-                    $class,
-                    $enabled ? "yes" : "no",
-                    $cronJob->getCronExpression(),
+                    $command,
+                    $cron,
                     $cronExpression->isDue() ? "yes" : "no",
                     $cronExpression->getNextRunDate()->format("Y-m-d H:i:s")
                 ]);
-            } catch (\InvalidArgumentException $exception) {
-                $table->addRow([
-                    "<error>$class</error>",
-                    "<error>" . ($enabled ? "yes" : "no") . "</error>",
-                    "<error>{$cronJob->getCronExpression()}</error>",
-                    "<error>Cron expression is invalid</error>",
-                    "<error>Cron expression is invalid</error>"
-                ]);
             }
+
+            $table->render();
         }
 
-        $table->render();
+        return 0;
     }
 
 }
