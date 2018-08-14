@@ -1,7 +1,3 @@
-This is a simple cron implementation just for my testing.
-
-It shouldn't really be used anywhere near production.
-
 ## How to install
 
 Via composer: `composer require rikudou/cron-bundle`.
