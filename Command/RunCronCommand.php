@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class RunCronCommand extends ContainerAwareCommand
@@ -24,11 +25,13 @@ class RunCronCommand extends ContainerAwareCommand
 
     protected function configure()
     {
-        $this->setDescription("Runs all cron jobs that are due");
+        $this->setDescription("Runs all cron jobs that are due")
+            ->addOption("no-default-logging", null, InputOption::VALUE_NONE, "Only custom logs from your own code will be logged");
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $noDefaultLogging = $input->getOption("no-default-logging");
         $cronJobsList = $this->getContainer()->get(CronJobsList::class);
         /** @var LoggerInterface $logger */
         $logger = $this->getContainer()->get("rikudou_cron.logger");
@@ -46,15 +49,21 @@ class RunCronCommand extends ContainerAwareCommand
                 }
                 $cronExpression = CronExpression::factory($cronJob->getCronExpression());
                 if ($cronExpression->isDue()) {
-                    $logger->info("[CRON] Executing cron job from class " . get_class($cronJob));
+                    if (!$noDefaultLogging) {
+                        $logger->info("[CRON] Executing cron job from class " . get_class($cronJob));
+                    }
                     $cronJob->execute($input, $output, $logger);
-                    $logger->info("[CRON] Cron job " . get_class($cronJob) . " successfully executed");
+                    if (!$noDefaultLogging) {
+                        $logger->info("[CRON] Cron job " . get_class($cronJob) . " successfully executed");
+                    }
                 }
                 $success++;
             } catch (\Throwable $exception) {
-                $logger->error("[CRON] Cron job " . get_class($cronJob) . " failed");
-                $logger->error("[CRON] {$exception->getMessage()}");
-                $logger->error("[CRON] {$exception->getTraceAsString()}");
+                if (!$noDefaultLogging) {
+                    $logger->error("[CRON] Cron job " . get_class($cronJob) . " failed");
+                    $logger->error("[CRON] {$exception->getMessage()}");
+                    $logger->error("[CRON] {$exception->getTraceAsString()}");
+                }
                 if ($output->isVeryVerbose()) {
                     $error = $exception->getTraceAsString();
                 } else if ($output->isVerbose()) {
@@ -71,20 +80,26 @@ class RunCronCommand extends ContainerAwareCommand
             try {
                 $cronExpression = CronExpression::factory($cron);
                 if ($cronExpression->isDue()) {
-                    $logger->info("[CRON] Executing command $commandName");
+                    if (!$noDefaultLogging) {
+                        $logger->info("[CRON] Executing command $commandName");
+                    }
                     $command = $this->getApplication()->find($command);
                     $commandInput = new ArrayInput([]);
                     $exitCode = $command->run($commandInput, $output);
-                    if($exitCode === 0) {
-                        $logger->info("[CRON] Command $commandName executed successfully");
-                    } else {
-                        $logger->warning("[CRON] Command $commandName exited with non-zero exit code: $exitCode");
+                    if (!$noDefaultLogging) {
+                        if ($exitCode === 0) {
+                            $logger->info("[CRON] Command $commandName executed successfully");
+                        } else {
+                            $logger->warning("[CRON] Command $commandName exited with non-zero exit code: $exitCode");
+                        }
                     }
                 }
             } catch (\Throwable $exception) {
-                $logger->error("[CRON] Execution of command $commandName failed");
-                $logger->error("[CRON] {$exception->getMessage()}");
-                $logger->error("[CRON] {$exception->getTraceAsString()}");
+                if (!$noDefaultLogging) {
+                    $logger->error("[CRON] Execution of command $commandName failed");
+                    $logger->error("[CRON] {$exception->getMessage()}");
+                    $logger->error("[CRON] {$exception->getTraceAsString()}");
+                }
                 if ($output->isVeryVerbose()) {
                     $error = $exception->getTraceAsString();
                 } else if ($output->isVerbose()) {
