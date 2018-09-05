@@ -13,7 +13,8 @@
     "php": ">=7.2",
     "symfony/framework-bundle": "^4.1",
     "dragonmantank/cron-expression": "^2.2",
-    "symfony/console": "^4.1"
+    "symfony/console": "^4.1",
+    "symfony/yaml": "^4.1"
   },
   "autoload": {
     "psr-4": {

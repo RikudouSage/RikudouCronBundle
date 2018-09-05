@@ -15,11 +15,6 @@ class ListCronCommand extends ContainerAwareCommand
 
     protected static $defaultName = "cron:list";
 
-    public function __construct(?string $name = null)
-    {
-        parent::__construct($name);
-    }
-
     protected function configure()
     {
         $this
@@ -49,7 +44,7 @@ class ListCronCommand extends ContainerAwareCommand
 
             foreach ($cronJobsList as $class) {
                 /** @var CronJobInterface $cronJob */
-                $cronJob = new $class;
+                $cronJob = $this->getContainer()->get($class);
                 try {
                     $enabled = true;
                     if (method_exists($cronJob, "isEnabled")) {
