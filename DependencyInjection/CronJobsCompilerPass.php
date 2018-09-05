@@ -16,6 +16,10 @@ class CronJobsCompilerPass implements CompilerPassInterface
     {
         $definition = $container->getDefinition(CronJobsList::class);
         $services = $container->findTaggedServiceIds("rikudou_cron_job.cronjob");
+        foreach ($services as $service => $null) {
+            $cronJobDefinition = $container->getDefinition($service);
+            $cronJobDefinition->setPublic(true);
+        }
         $definition->addArgument(array_keys($services));
     }
 }

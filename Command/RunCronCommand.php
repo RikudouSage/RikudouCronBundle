@@ -38,10 +38,10 @@ class RunCronCommand extends ContainerAwareCommand
 
         $errors = [];
         $success = 0;
-        foreach ($cronJobsList as $cronJob) {
+        foreach ($cronJobsList as $cronJobClass) {
             /** @var CronJobInterface $cronJob */
             try {
-                $cronJob = new $cronJob;
+                $cronJob = $this->getContainer()->get($cronJobClass);
                 if (method_exists($cronJob, "isEnabled")) {
                     if (!$cronJob->isEnabled()) {
                         continue;
@@ -60,7 +60,7 @@ class RunCronCommand extends ContainerAwareCommand
                 $success++;
             } catch (\Throwable $exception) {
                 if (!$noDefaultLogging) {
-                    $logger->error("[CRON] Cron job " . get_class($cronJob) . " failed");
+                    $logger->error("[CRON] Cron job " . $cronJobClass . " failed");
                     $logger->error("[CRON] {$exception->getMessage()}");
                     $logger->error("[CRON] {$exception->getTraceAsString()}");
                 }
