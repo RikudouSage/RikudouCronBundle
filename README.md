@@ -209,7 +209,8 @@ rikudou_cron:
 This setting will run cache:clear every two minutes.
 
 The config file will be created (if it doesn't already exist) when you first
-run any cron command (`cron:list`, `cron:run`).
+run any cron command (`cron:list`, `cron:run`) at 
+`%projectDir%/config/packages/rikudou_cron.yaml`.
 
 Example output from `cron:list`:
 
