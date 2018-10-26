@@ -6,7 +6,6 @@ use Cron\CronExpression;
 use Psr\Log\LoggerInterface;
 use Rikudou\CronBundle\Cron\CronJobInterface;
 use Rikudou\CronBundle\Cron\CronJobsList;
-use Rikudou\CronBundle\Helper\CanUseInit;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -16,8 +15,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class RunCronCommand extends ContainerAwareCommand
 {
-
-    use CanUseInit;
 
     protected static $defaultName = "cron:run";
 
@@ -34,7 +31,6 @@ class RunCronCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->init();
         $noDefaultLogging = $input->getOption("no-default-logging");
         $cronJobsList = $this->getContainer()->get(CronJobsList::class);
         /** @var LoggerInterface $logger */

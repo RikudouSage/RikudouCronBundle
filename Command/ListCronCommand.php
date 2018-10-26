@@ -5,7 +5,6 @@ namespace Rikudou\CronBundle\Command;
 use Cron\CronExpression;
 use Rikudou\CronBundle\Cron\CronJobInterface;
 use Rikudou\CronBundle\Cron\CronJobsList;
-use Rikudou\CronBundle\Helper\CanUseInit;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,8 +12,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ListCronCommand extends ContainerAwareCommand
 {
-
-    use CanUseInit;
 
     protected static $defaultName = "cron:list";
 
@@ -26,7 +23,6 @@ class ListCronCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->init();
         $cronJobsList = $this->getContainer()->get(CronJobsList::class);
 
         if (!count($cronJobsList) && !count($cronJobsList->getCommands())) {
