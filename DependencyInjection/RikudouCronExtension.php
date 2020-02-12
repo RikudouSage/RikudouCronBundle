@@ -2,9 +2,10 @@
 
 namespace Rikudou\CronBundle\DependencyInjection;
 
-use Rikudou\CronBundle\Cron\CronJobsList;
+use Rikudou\CronBundle\Cron\CronJobList;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -28,11 +29,17 @@ class RikudouCronExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $commands = [];
-        foreach ($config["commands"] as $command) {
-            $commands[$command["command"]] = $command["cron_expression"];
+        foreach ($config["commands"] as $name => $command) {
+            $commands[$name] = [
+                'command' => $command['command'],
+                'expression' => $command['cron_expression'],
+                'enabled' => $command['enabled']
+            ];
         }
 
-        $definition = $container->getDefinition(CronJobsList::class);
-        $definition->addArgument($commands);
+        $definition = $container->getDefinition('rikudou.cron.cron_job_list');
+        $definition->addMethodCall('setCommands', [$commands]);
+
+        $container->setAlias('rikudou.cron.logger', $config['logger_service']);
     }
 }

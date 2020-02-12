@@ -1,7 +1,7 @@
 {
   "name": "rikudou/cron-bundle",
   "type": "symfony-bundle",
-  "description": "Simple and effective cron implementation for Symfony 4",
+  "description": "Simple and effective cron implementation for Symfony 4+",
   "license": "WTFPL",
   "authors": [
     {
@@ -11,11 +11,10 @@
   ],
   "require": {
     "php": ">=7.2",
-    "symfony/framework-bundle": "^4.1",
+    "symfony/framework-bundle": ">=4.4",
     "dragonmantank/cron-expression": "^2.2",
-    "symfony/console": "^4.1",
-    "symfony/yaml": "^4.1",
-    "rikudou/installer": "^1.1"
+    "symfony/console": ">=4.4",
+    "symfony/yaml": ">=4.4"
   },
   "autoload": {
     "psr-4": {

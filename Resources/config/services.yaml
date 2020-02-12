@@ -1,13 +1,30 @@
 services:
 
-  _defaults:
-    public: true
+  rikudou.cron.cron_job_list:
+    class: Rikudou\CronBundle\Cron\CronJobList
 
-  rikudou_cron.logger:
-    alias: 'logger'
+  rikudou.cron.command.list:
+    class: Rikudou\CronBundle\Command\ListCronJobsCommand
+    arguments:
+      ['@rikudou.cron.cron_job_list']
+    tags:
+      - console.command
 
-  Rikudou\CronBundle\Command\:
-    resource: '../../Command'
-    tags: [console.command]
+  rikudou.cron.command.run:
+    class: Rikudou\CronBundle\Command\RunCronJobsCommand
+    arguments:
+      ['@rikudou.cron.cron_job_list']
+    tags:
+      - console.command
+    calls:
+      - [setLogger, ['@?rikudou.cron.logger']]
+      - [setEventDispatcher, ['@?event_dispatcher']]
 
-  Rikudou\CronBundle\Cron\CronJobsList: ~
+  rikudou.cron.command.execute:
+    class: Rikudou\CronBundle\Command\ExecuteCronJobCommand
+    arguments:
+      ['@rikudou.cron.cron_job_list']
+    tags:
+      - console.command
+    calls:
+      - [setLogger, ['@?rikudou.cron.logger']]

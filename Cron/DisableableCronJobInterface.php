@@ -2,13 +2,12 @@
 
 namespace Rikudou\CronBundle\Cron;
 
-interface DisablableCronJobInterface
+interface DisableableCronJobInterface extends CronJobInterface
 {
-
     /**
-     * Returns true if cron job is enabled and should be ran, false otherwise
+     * Whether the cron job is disabled or not
+     *
      * @return bool
      */
     public function isEnabled(): bool;
-
 }
