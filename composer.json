@@ -2,7 +2,7 @@
   "name": "rikudou/cron-bundle",
   "type": "symfony-bundle",
   "description": "Simple and effective cron implementation for Symfony 4+",
-  "license": "WTFPL",
+  "license": "MIT",
   "authors": [
     {
       "name": "Dominik Chrástecký",
