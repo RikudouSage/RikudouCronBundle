@@ -7,7 +7,7 @@ namespace Rikudou\CronBundle\DTO;
 use DateTimeInterface;
 use Throwable;
 
-class CronJobError
+final class CronJobError
 {
     /**
      * @var Throwable

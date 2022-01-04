@@ -1,5 +1,0 @@
-rikudou_cron:
-  commands:
-#    clearCache:
-#      command: 'cache:clear'
-#      cron_expression: '* * * * *'

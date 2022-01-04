@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 
-class RunCronJobsCommand extends Command
+final class RunCronJobsCommand extends Command
 {
     use OptionalLoggerTrait;
 
@@ -39,7 +39,7 @@ class RunCronJobsCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Runs cron jobs that are due')
@@ -51,7 +51,7 @@ class RunCronJobsCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $shouldLog = !$input->getOption("no-default-logging") && $this->logger !== null;
         $errors = [];

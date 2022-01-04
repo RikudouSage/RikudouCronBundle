@@ -19,7 +19,6 @@ interface CronJobInterface
      * @param InputInterface $input
      * @param OutputInterface $output
      * @param LoggerInterface|null $logger
-     * @return mixed
      */
-    public function execute(InputInterface $input, OutputInterface $output, ?LoggerInterface $logger);
+    public function execute(InputInterface $input, OutputInterface $output, ?LoggerInterface $logger): void;
 }

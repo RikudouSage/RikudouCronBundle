@@ -2,7 +2,6 @@
 
 namespace Rikudou\CronBundle\Command;
 
-use Psr\Log\LoggerInterface;
 use Rikudou\CronBundle\Cron\CronJobList;
 use Rikudou\CronBundle\Traits\OptionalLoggerTrait;
 use Symfony\Component\Console\Command\Command;
@@ -10,7 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ExecuteCronJobCommand extends Command
+final class ExecuteCronJobCommand extends Command
 {
     use OptionalLoggerTrait;
 
@@ -27,7 +26,7 @@ class ExecuteCronJobCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription("Executes a single cron job (even if it's disabled or is not due)")
@@ -38,7 +37,7 @@ class ExecuteCronJobCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $cronJobName = $input->getArgument('cronJobName');
         $cronJob = $this->cronJobList->findByName($cronJobName);

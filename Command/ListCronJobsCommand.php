@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ListCronJobsCommand extends Command
+final class ListCronJobsCommand extends Command
 {
     protected static $defaultName = 'cron:list';
 
@@ -31,7 +31,7 @@ class ListCronJobsCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Lists all cron jobs')
@@ -44,7 +44,7 @@ class ListCronJobsCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $timezone = new DateTimeZone($input->getOption('timezone'));
         $cronJobs = $this->cronJobList->getCronJobs();

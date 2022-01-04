@@ -4,7 +4,7 @@ namespace Rikudou\CronBundle\Cron;
 
 use Cron\CronExpression;
 
-class CronJobList
+final class CronJobList
 {
     /**
      * @var CronJobInterface[]
@@ -16,7 +16,7 @@ class CronJobList
      */
     private $commands = [];
 
-    public function addCronJob(CronJobInterface $cronJob)
+    public function addCronJob(CronJobInterface $cronJob): void
     {
         $key = get_class($cronJob);
         if ($cronJob instanceof NamedCronJobInterface) {
@@ -26,7 +26,7 @@ class CronJobList
         $this->cronJobs[$key] = $cronJob;
     }
 
-    public function setCommands(array $commands)
+    public function setCommands(array $commands): void
     {
         $this->commands = $commands;
     }

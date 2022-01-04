@@ -2,7 +2,7 @@
 
 namespace Rikudou\CronBundle\Event;
 
-class CronEvents
+final class CronEvents
 {
     /**
      * Dispatched when there is an error in a running cron job

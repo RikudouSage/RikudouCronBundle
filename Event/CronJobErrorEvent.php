@@ -7,7 +7,7 @@ namespace Rikudou\CronBundle\Event;
 use Rikudou\CronBundle\DTO\CronJobError;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class CronJobErrorEvent extends Event
+final class CronJobErrorEvent extends Event
 {
     /**
      * @var CronJobError[]

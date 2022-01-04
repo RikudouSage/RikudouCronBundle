@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class CronJobsCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $cronJobListService = $container->getDefinition('rikudou.cron.cron_job_list');
 
