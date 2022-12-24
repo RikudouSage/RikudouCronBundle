@@ -59,15 +59,15 @@ final class RunCronJobsCommand extends Command
         foreach ($this->cronJobList->getDueJobs() as $cronJobName => $cronJob) {
             try {
                 if ($shouldLog) {
-                    $this->logger->info("[CRON] Executing cron job '${cronJobName}'");
+                    $this->logger->info("[CRON] Executing cron job '{$cronJobName}'");
                 }
                 $cronJob->execute($input, $output, $this->logger);
                 if (!$shouldLog) {
-                    $this->logger->info("[CRON] Cron job '${cronJobName}' successfully executed");
+                    $this->logger->info("[CRON] Cron job '{$cronJobName}' successfully executed");
                 }
             } catch (Throwable $exception) {
                 if ($shouldLog) {
-                    $this->logger->error("[CRON] Cron job '${cronJobName}' failed");
+                    $this->logger->error("[CRON] Cron job '{$cronJobName}' failed");
                     $this->logger->error("[CRON] {$exception->getMessage()}");
                     $this->logger->error("[CRON] {$exception->getTraceAsString()}");
                 }
@@ -79,21 +79,21 @@ final class RunCronJobsCommand extends Command
         foreach ($this->cronJobList->getDueCommands() as $commandName => $command) {
             try {
                 if ($shouldLog) {
-                    $this->logger->info("[CRON] Executing command ${commandName}");
+                    $this->logger->info("[CRON] Executing command {$commandName}");
                 }
                 $command = $this->getApplication()->find($command);
                 $commandInput = new ArrayInput([]);
                 $exitCode = $command->run($commandInput, $output);
                 if ($shouldLog) {
                     if ($exitCode === 0) {
-                        $this->logger->info("[CRON] Command ${commandName} executed successfully");
+                        $this->logger->info("[CRON] Command {$commandName} executed successfully");
                     } else {
-                        $this->logger->warning("[CRON] Command ${commandName} exited with non-zero exit code: ${exitCode}");
+                        $this->logger->warning("[CRON] Command {$commandName} exited with non-zero exit code: {$exitCode}");
                     }
                 }
             } catch (Throwable $exception) {
                 if ($shouldLog) {
-                    $this->logger->error("[CRON] Execution of command ${commandName} failed");
+                    $this->logger->error("[CRON] Execution of command {$commandName} failed");
                     $this->logger->error("[CRON] {$exception->getMessage()}");
                     $this->logger->error("[CRON] {$exception->getTraceAsString()}");
                 }

@@ -93,8 +93,8 @@ final class ListCronJobsCommand extends Command
                 ]);
             } catch (InvalidArgumentException $e) {
                 $table->addRow([
-                    "<error>${name}</error>",
-                    "<error>${isEnabled}</error>",
+                    "<error>{$name}</error>",
+                    "<error>{$isEnabled}</error>",
                     "<error>Class</error>",
                     "<error>{$cronJob->getCronExpression()}",
                     "<error>Cron expression is invalid</error>",
@@ -122,8 +122,8 @@ final class ListCronJobsCommand extends Command
                 ]);
             } catch (InvalidArgumentException $e) {
                 $table->addRow([
-                    "<error>${name}</error>",
-                    "<error>${isEnabled}</error>",
+                    "<error>{$name}</error>",
+                    "<error>{$isEnabled}</error>",
                     "<error>Class</error>",
                     "<error>{$cronCommand['expression']}",
                     "<error>Cron expression is invalid</error>",

@@ -43,7 +43,7 @@ final class ExecuteCronJobCommand extends Command
         $cronJob = $this->cronJobList->findByName($cronJobName);
 
         if ($cronJob === null) {
-            $output->writeln("Cron job with the name '${cronJobName}' does not exist. Try running cron:list.");
+            $output->writeln("Cron job with the name '{$cronJobName}' does not exist. Try running cron:list.");
             return 1;
         }
 
