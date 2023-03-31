@@ -8,6 +8,7 @@ use Rikudou\CronBundle\DTO\CronJobError;
 use Rikudou\CronBundle\Event\CronEvents;
 use Rikudou\CronBundle\Event\CronJobErrorEvent;
 use Rikudou\CronBundle\Traits\OptionalLoggerTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,26 +17,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 
+#[AsCommand(name: 'cron:run')]
 final class RunCronJobsCommand extends Command
 {
     use OptionalLoggerTrait;
 
-    protected static $defaultName = 'cron:run';
+    private ?EventDispatcherInterface $eventDispatcher = null;
 
-    /**
-     * @var CronJobList
-     */
-    private $cronJobList;
-
-    /**
-     * @var EventDispatcherInterface|null
-     */
-    private $eventDispatcher;
-
-    public function __construct(CronJobList $cronJobList)
+    public function __construct(private CronJobList $cronJobList)
     {
-        $this->cronJobList = $cronJobList;
-
         parent::__construct();
     }
 
@@ -47,7 +37,7 @@ final class RunCronJobsCommand extends Command
                 'no-default-logging',
                 null,
                 InputOption::VALUE_NONE,
-                'If this flag is present, no default logs (e.g. cron job start and end) will be logged. Your own logs will be logged normally.'
+                'If this flag is present, no default logs (e.g. cron job start and end) will be logged. Your own logs will be logged normally.',
             );
     }
 
@@ -81,7 +71,7 @@ final class RunCronJobsCommand extends Command
                 if ($shouldLog) {
                     $this->logger->info("[CRON] Executing command {$commandName}");
                 }
-                $command = $this->getApplication()->find($command);
+                $command = $this->getApplication()->find($command['command']);
                 $commandInput = new ArrayInput([]);
                 $exitCode = $command->run($commandInput, $output);
                 if ($shouldLog) {
@@ -112,7 +102,7 @@ final class RunCronJobsCommand extends Command
         return 0;
     }
 
-    public function setEventDispatcher(?EventDispatcherInterface $eventDispatcher)
+    public function setEventDispatcher(?EventDispatcherInterface $eventDispatcher): void
     {
         $this->eventDispatcher = $eventDispatcher;
     }
