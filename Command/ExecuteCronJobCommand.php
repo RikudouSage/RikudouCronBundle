@@ -4,25 +4,19 @@ namespace Rikudou\CronBundle\Command;
 
 use Rikudou\CronBundle\Cron\CronJobList;
 use Rikudou\CronBundle\Traits\OptionalLoggerTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'cron:execute')]
 final class ExecuteCronJobCommand extends Command
 {
     use OptionalLoggerTrait;
 
-    protected static $defaultName = 'cron:execute';
-
-    /**
-     * @var CronJobList
-     */
-    private $cronJobList;
-
-    public function __construct(CronJobList $cronJobList)
+    public function __construct(private CronJobList $cronJobList)
     {
-        $this->cronJobList = $cronJobList;
         parent::__construct();
     }
 
@@ -33,7 +27,7 @@ final class ExecuteCronJobCommand extends Command
             ->addArgument(
                 'cronJobName',
                 InputArgument::REQUIRED,
-                'The cron job name, can be either a custom cron job name or the fully qualified class name'
+                'The cron job name, can be either a custom cron job name or the fully qualified class name',
             );
     }
 

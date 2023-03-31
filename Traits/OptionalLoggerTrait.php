@@ -8,12 +8,9 @@ use Psr\Log\LoggerInterface;
 
 trait OptionalLoggerTrait
 {
-    /**
-     * @var LoggerInterface|null
-     */
-    private $logger = null;
+    private ?LoggerInterface $logger = null;
 
-    public function setLogger(?LoggerInterface $logger)
+    public function setLogger(?LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }

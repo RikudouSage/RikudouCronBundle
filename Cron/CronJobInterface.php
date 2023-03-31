@@ -10,15 +10,8 @@ interface CronJobInterface
 {
     /**
      * Returns the cron expression, e.g. '0 * * * *'
-     *
-     * @return string
      */
     public function getCronExpression(): string;
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     * @param LoggerInterface|null $logger
-     */
     public function execute(InputInterface $input, OutputInterface $output, ?LoggerInterface $logger): void;
 }

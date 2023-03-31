@@ -10,16 +10,11 @@ use Symfony\Contracts\EventDispatcher\Event;
 final class CronJobErrorEvent extends Event
 {
     /**
-     * @var CronJobError[]
-     */
-    private $errors;
-
-    /**
      * @param CronJobError[] $errors
      */
-    public function __construct(array $errors)
-    {
-        $this->errors = $errors;
+    public function __construct(
+        private array $errors
+    ) {
     }
 
     /**

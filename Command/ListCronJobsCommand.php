@@ -9,25 +9,18 @@ use Rikudou\CronBundle\Cron\CronJobList;
 use Rikudou\CronBundle\Cron\DisableableCronJobInterface;
 use Rikudou\CronBundle\Cron\NamedCronJobInterface;
 use Rikudou\CronBundle\Traits\OptionalLoggerTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'cron:list')]
 final class ListCronJobsCommand extends Command
 {
-    protected static $defaultName = 'cron:list';
-
-    /**
-     * @var CronJobList
-     */
-    private $cronJobList;
-
-    public function __construct(CronJobList $cronJobList)
+    public function __construct(private CronJobList $cronJobList)
     {
-        $this->cronJobList = $cronJobList;
-
         parent::__construct();
     }
 
@@ -40,7 +33,7 @@ final class ListCronJobsCommand extends Command
                 't',
                 InputOption::VALUE_REQUIRED,
                 'Timezone in which the next run date is displayed',
-                'UTC'
+                'UTC',
             );
     }
 

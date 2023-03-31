@@ -9,12 +9,12 @@ final class CronJobList
     /**
      * @var CronJobInterface[]
      */
-    private $cronJobs = [];
+    private array $cronJobs = [];
 
     /**
      * @var array<string,array<string, string>>
      */
-    private $commands = [];
+    private array $commands = [];
 
     public function addCronJob(CronJobInterface $cronJob): void
     {
