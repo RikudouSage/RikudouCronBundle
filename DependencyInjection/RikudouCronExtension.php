@@ -29,7 +29,9 @@ final class RikudouCronExtension extends Extension
             $commands[$name] = [
                 'command' => $command['command'],
                 'expression' => $command['cron_expression'],
-                'enabled' => $command['enabled']
+                'enabled' => $command['enabled'],
+                'args' => $command['arguments'],
+                'opts' => $command['options'],
             ];
         }
 

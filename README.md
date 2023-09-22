@@ -212,6 +212,22 @@ The config file will be created (if it doesn't already exist) when you first
 run any cron command (`cron:list`, `cron:run`) at 
 `%projectDir%/config/packages/rikudou_cron.yaml`.
 
+IF you need to pass arguments or options to the command, you can do so:
+
+```yaml
+rikudou_cron:
+    commands:
+      someCommand:
+        command: app:my-command
+        cron_expression: "*/2 * * * *"
+        options:
+          some-option: some-value
+        arguments:
+          some-argument: some-value
+```
+
+Note that the option and argument names need to match their names as defined in the target command.
+
 Example output from `cron:list`:
 
 ```
