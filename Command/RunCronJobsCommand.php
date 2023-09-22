@@ -66,13 +66,20 @@ final class RunCronJobsCommand extends Command
         }
 
 
-        foreach ($this->cronJobList->getDueCommands() as $commandName => $command) {
+        foreach ($this->cronJobList->getDueCommands() as $commandName => $commandData) {
             try {
                 if ($shouldLog) {
                     $this->logger->info("[CRON] Executing command {$commandName}");
                 }
-                $command = $this->getApplication()->find($command['command']);
-                $commandInput = new ArrayInput([]);
+                $command = $this->getApplication()->find($commandData['command']);
+                $opts = $commandData['opts'];
+                $args = [];
+                foreach ($opts as $key => $value) {
+                    $args["--{$key}"] = $value;
+                }
+                $args = array_merge($commandData['args'], $args);
+
+                $commandInput = new ArrayInput($args);
                 $exitCode = $command->run($commandInput, $output);
                 if ($shouldLog) {
                     if ($exitCode === 0) {

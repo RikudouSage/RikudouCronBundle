@@ -67,7 +67,7 @@ final class CronJobList
     }
 
     /**
-     * @return array<string,array<string,string>>
+     * @return array<array{command: string, expression: string, enabled: bool, args: array<string, mixed>, opts: array<string, mixed>}>
      */
     public function getDueCommands(): array
     {
