@@ -3,6 +3,8 @@
 namespace Rikudou\CronBundle\Cron;
 
 use Cron\CronExpression;
+use Psr\Clock\ClockInterface;
+use Symfony\Component\Clock\NativeClock;
 
 final class CronJobList
 {
@@ -15,6 +17,12 @@ final class CronJobList
      * @var array<string,array<string, string>>
      */
     private array $commands = [];
+
+    public function __construct(
+        private ?ClockInterface $clock,
+    ) {
+        $this->clock ??= new NativeClock();
+    }
 
     public function addCronJob(CronJobInterface $cronJob): void
     {
@@ -62,7 +70,9 @@ final class CronJobList
                 return false;
             }
             $cronExpression = CronExpression::factory($cronJob->getCronExpression());
-            return $cronExpression->isDue();
+            $now = $this->clock->now();
+
+            return $cronExpression->isDue($now->format('c'), $now->getTimezone()->getName());
         });
     }
 
@@ -76,7 +86,9 @@ final class CronJobList
                 return false;
             }
             $cronExpression = CronExpression::factory($commandData['expression']);
-            return $cronExpression->isDue();
+            $now = $this->clock->now();
+
+            return $cronExpression->isDue($now->format('c'), $now->getTimezone()->getName());
         });
     }
 }

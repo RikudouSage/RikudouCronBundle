@@ -2,6 +2,8 @@ services:
 
   rikudou.cron.cron_job_list:
     class: Rikudou\CronBundle\Cron\CronJobList
+    arguments:
+      - '@?clock'
 
   rikudou.cron.command.list:
     class: Rikudou\CronBundle\Command\ListCronJobsCommand

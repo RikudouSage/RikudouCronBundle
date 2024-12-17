@@ -14,7 +14,8 @@
     "symfony/framework-bundle": ">=4.4",
     "dragonmantank/cron-expression": "^2.2",
     "symfony/console": ">=4.4",
-    "symfony/yaml": ">=4.4"
+    "symfony/yaml": ">=4.4",
+    "symfony/clock": ">=4.4"
   },
   "autoload": {
     "psr-4": {
